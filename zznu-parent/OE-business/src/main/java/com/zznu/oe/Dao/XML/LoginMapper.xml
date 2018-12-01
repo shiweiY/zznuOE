@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+ <mapper namespace="com.zznu.oe.Dao.Mapper.LoginMapper">
+ 
+ 	<resultMap type="USER" id="userMap">
+ 		<id column="id" property="id" />
+ 		<result column="username" property="username"></result>
+ 		<result column="password" property="password"></result>
+ 		<result column="name" property="name"></result>
+ 		<result column="age" property="age"></result>
+ 		<result column="telephone" property="telephone"></result>
+ 		<result column="address" property="address"></result>
+ 		<result column="jnumber" property="jnumber"></result>
+ 		<result column="group" property="group"></result>
+ 		<result column="other" property="other"></result>
+ 	</resultMap>
+ 	<resultMap type="MENU" id="menuMap">
+ 		<id column="m_id" property="m_id" />
+ 		<result column="menu_type" property="menu_type"></result>
+ 		<result column="menu_page" property="menu_page"></result>
+ 		<result column="menu_name" property="menu_name"></result>
+ 		<result column="menu_parent" property="menu_parent"></result>
+ 		<result column="menu_child" property="menu_child"></result>
+ 		
+ 	</resultMap>
+ 	
+ 	
+ 	<select id="getUserForLogin"  resultMap="userMap">
+ 		select * from usrdt where username = #{username,jdbcType=VARCHAR} and password = #{password,jdbcType=VARCHAR}
+ 	</select>
+ 	
+ 	<insert id="insertLoginLog" parameterType="Map" >
+ 		INSERT INTO loginrecord VALUES(#{loginId,jdbcType=VARCHAR},#{user.id,jdbcType=VARCHAR}, 
+ 									   #{user.username,jdbcType=DATE},#{createTime,jdbcType=VARCHAR},
+ 									   #{clientIp,jdbcType=VARCHAR});
+ 	</insert>
+ 	
+ 	<select id="getMenuId" resultType="String">
+ 		select ug.menu_id from usrgroup ug where ug.group_id = #{groupId};
+ 	</select>
+ 	
+ 	<select id="getUserMenuById" resultType="list" parameterType="list" resultMap="menuMap">
+ 		select * from usrmenu um where 1 = 1 and 
+ 		<foreach collection="list" item="m_id" open="" close=";" separator="or">
+ 			um.m_id = #{m_id}
+ 		</foreach>
+ 	</select>
+ 
+ </mapper>

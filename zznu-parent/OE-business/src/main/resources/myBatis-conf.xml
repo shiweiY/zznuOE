@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+   <properties resource="jdbc.properties"></properties>
+   
+   <settings>
+        <!-- 打印查询语句 -->
+        <setting name="logImpl" value="LOG4J" />
+    </settings>
+   
+   <typeAliases>
+   		<package name="com.zznu.oe.model"/>
+   </typeAliases>
+   
+   <environments default="development">
+   		<environment id="development">
+   			<transactionManager type="JDBC" />
+   			<dataSource type="POOLED">
+   				<property name="driver" value="${driver}"/>
+   				<property name="url" value="${url}"/>
+   				<property name="username" value="${usrname}"/>
+   				<property name="password" value="${password}"/>
+   				
+   				<!-- 任意时间里可以存在(使用)的连接数量,默认值为10 -->
+   				<property name="poolMaximumActiveConnections" value="80"/>
+   				<!-- 任意时间里可以存在的空闲的连接的数量,默认值为5,最好设置为0 -->
+   				<property name="poolMaximumIdleConnections" value="0"/>
+   				
+   				<property name="poolMaximumCheckoutTime" value="20000"/>
+   				<!-- 如果连接时间超出，则打印连接池状态日志，并重新尝试获取一个新连接，避免一直安安静静的无法连接 -->
+   				<property name="poolTimeToWait" value="20000"/>
+   				
+   				<!-- 侦测查询，用来检测连接是否正常，value配置一个查询非常快的sql语句 -->
+   				<property name="poolPingQuery" value="select * 1"/>
+   				<!-- 开启侦测查询 -->
+   				<property name="poolPingEnabled" value="true"/>
+   				<!-- 侦测查询的频率 -->
+   				<property name="poolPingConnectionsNotUsedFor" value="3600000"/>
+   			</dataSource>
+   		</environment>
+   </environments>
+   
+  <!--  接口映射模式配置包路径 -->
+   <mappers>
+   		<package name="com.zznu.oe.Dao.Mapper" />
+   </mappers>
+   
+</configuration>
