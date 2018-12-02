@@ -57,42 +57,46 @@ public class LoginController {
 		JSONReturn jp = new JSONReturn();
 		if(user != null) {
 			
-			String ip = getIpAddress(request);
+			String sessionID = request.getSession().getId();
+			user.setSessionID(sessionID);
 			
 			map.clear();
 			map.put("user", user);
 			map.put("loginId", DateUtil.getCurrentTimeMillis());
-			map.put("createTime", DateUtil.getSqlTime());
-			map.put("clientIp", ip);
+			map.put("loginTime", DateUtil.getSqlTime());
+			
+			String ip = getIpAddress(request);
+			map.put("loginIp", ip);
 
 //			session.insert("LoginMapper.insertLoginLog", map);
-			login.insertLoginLog(map);
+			login.insertLoginLog(map);//对此次登录记录于loginrecord表中
 			
-			String groupId = user.getGroup();
-			String menuId = login.getMenuId(groupId);//菜单id
+			String groupId = user.getGroup();//获取用户所在权限群组
+			String menuId = login.getMenuId(groupId);//获取菜单id  1,2,3
 			
 			if(menuId != null && menuId.length() > 1) {
 				List<String> mid = Arrays.asList(menuId.split(","));
-				List<Menu> menu = login.getUserMenuById(mid);
+				List<Menu> menu = login.getUserMenuById(mid);//获取菜单
+				RedisHelper.setSerialData("usrmenu", menu);//普通菜单放入缓存
 				
-				for (Menu mn : menu) {//获取子菜单
-					if(mn.getMenu_child() != null && mn.getMenu_child().length() > 0){
-						List<String> mcid = Arrays.asList(mn.getMenu_child().split(","));
-						List<Menu> mc = login.getUserMenuById(mcid);
-						RedisHelper.setSerialData(mn.getM_id(), mc);
+				//下拉式菜单的子菜单进行遍历获取，然后放入缓存
+				for (Menu selectmenu : menu) {
+					//一个用户的菜单组中可能有多个下拉式的菜单
+					if(selectmenu.getMenu_child() != null && selectmenu.getMenu_child().length() > 0){
+						List<String> mcid = Arrays.asList(selectmenu.getMenu_child().split(","));//拆分子菜单为list
+						List<Menu> mc = login.getUserMenuById(mcid);//获取子菜单
+						RedisHelper.setSerialData("select_menu_"+selectmenu.getM_id(), mc);
 					}
 				}
 				
-				RedisHelper.setSerialData("usrmenu", menu);
 			}
 			
 			
 			jp.setFlag(true);
-			jp.setPageUrl("index");
+			jp.setPageUrl("index");//前往主页
 			
 			RedisHelper.setUserInfo(user);
 			
-			RedisHelper.setUserInfo(user);
 			RedisHelper.setSerialData("user", user);
 			
 			return jp;

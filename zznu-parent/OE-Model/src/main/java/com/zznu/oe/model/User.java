@@ -18,6 +18,15 @@ public class User implements Serializable {
 	private String address;
 	private String jnumber;
 	private String group;
+	private String sessionID;
+	
+	
+	public String getSessionID() {
+		return sessionID;
+	}
+	public void setSessionID(String sessionID) {
+		this.sessionID = sessionID;
+	}
 	private String other;
 	
 	public String getTelephone() {

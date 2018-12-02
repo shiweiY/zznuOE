@@ -14,20 +14,22 @@ function initPageMenu(){
 	$.each(menuList,function(i,menu){
 		var menu_type=menu.menu_type;//菜单类型
 		if("a_menu" == menu_type){
-			$("#top_menu_ul").append("<li id=\"li_"+menu.menu_page+"\"><a id=\""+menu.menu_page+"\" onclick=\"gotoPages('"+menu.menu_page+"')\" name=\"menu_a\">"+menu.menu_name+"</a></li>");
+			$("#top_menu_ul").append("<li id=\"li_"+menu.menu_page+"\"><a onclick=\"gotoPages('"+menu.menu_page+"')\" name=\"menu_a\">"+menu.menu_name+"</a></li>");
 		}else if("select_menu" == menu_type){
 			$("#top_menu_ul").append("<li id=\"li_"+menu.m_id+"\" class=\"dropdown\">" +
-					"<a class=\"dropdown-toggle\" data-toggle=\"dropdown\" name=\"menu_a\" href=\"#\">"+
+					"<a class=\"dropdown-toggle\" data-toggle=\"dropdown\" name=\"select_menu_a_"+i+"\" >"+
 					menu.menu_name+"<span class=\"caret\"></span> </a></li>");
 			var key = menu.m_id;
+			var liId = "li_"+key;//此下拉选的li标签id
 			
-			menuChildMap = getSerialData(key);
+			key = "select_menu_"+key;//拼接前缀标识以去缓存获取子选项
+			
+			menuChildMap = getSerialData(key);//获取到菜单json对象
 
-			var liId = "li_"+key;
-			var childList = menuChildMap[key];
+			var childList = menuChildMap[key];//获取选项value
 			
-			var ultag = appendMenuUlTag(childList);
-			$("#"+liId).append(ultag);
+			var ultag = appendMenuUlTag(childList);//完成ul节点
+			$("#"+liId).append(ultag);//塞入此下拉选中
 		}
 	});
 	
@@ -50,7 +52,7 @@ function appendMenuUlTag(childList){
 	
 	var ul = "<ul class=\"dropdown-menu\">";
 	$.each(childList,function(i,childMenu){
-		ul = ul+" \n<li><a href=\"#\">"+childMenu.menu_name+"</a></li>"
+		ul = ul+" \n<li><a onclick=\"gotoPages('"+childMenu.menu_page+"')\">"+childMenu.menu_name+"</a></li>"
 	});
 	
 	ul = ul + " \n</ul>";
@@ -96,7 +98,7 @@ function getRedisCacheData(key){
 	if(key != null){
 		$.ajax({
 			type : "post",
-			url : "TransientData/getRedisDataByKeys",
+			url : "TransientData/getCacheDataByKeys",
 			data : {params:key},
 			dataType : "json",
 			traditional:true,//通过ajax提交数组时，jquery深度序列化以适应php等,它会自动在所设定的参数后面增加中括号： [] 后台取值不便,traditional为true可防止深度序列化
@@ -113,6 +115,8 @@ function getRedisCacheData(key){
 	return result;
 	
 }
+
+
 
 function getSerialData(key){
 	var result;
@@ -142,8 +146,8 @@ function signIn(){
 	var username = $("#username").val();
 	var password = $("#password").val();
 	
-	username = "zhangsan";
-	password = "zs";
+//	username = "zhangsan";
+//	password = "zs";
 	
 	if((username != null || username != "") || (password != null || password != "")){
 		
@@ -170,7 +174,7 @@ function signIn(){
 				}
 			},
 			error : function(data) {
-		          alert(data.message);
+		          alert("登录异常，请稍后再试！");
 		        }
 		});
 

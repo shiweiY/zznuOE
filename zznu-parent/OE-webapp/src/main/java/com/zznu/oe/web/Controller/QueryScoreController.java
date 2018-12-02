@@ -14,7 +14,7 @@ public class QueryScoreController {
 	public String gotoIndex(HttpServletRequest request) {
 		System.out.println();
 		System.out.println();
-		System.out.println();
+		System.out.println(request.getSession().getId());
 		return "QueryScore";
 	}
 }

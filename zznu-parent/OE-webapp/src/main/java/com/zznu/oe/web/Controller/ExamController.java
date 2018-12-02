@@ -12,7 +12,9 @@ public class ExamController {
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String gotoIndex(HttpServletRequest request) {
-
+		
+		System.out.println(request.getSession().getId());
+		
 		return "exam";
 	}
 }

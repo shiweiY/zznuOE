@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
 
 import com.zznu.oe.model.User;
@@ -59,13 +62,13 @@ public class CacheClient implements CacheManager {
 	}
 
 
-	public User getUserInfo() {
+	public User getUserInfo(HttpServletRequest request) {
 		User user;
 		Jedis jedis = null;
 
 		try {
 			jedis = getJedis();
-			byte[] bts = jedis.get("userInfo".getBytes());
+			byte[] bts = jedis.get(request.getSession().getId().getBytes());
 
 			if(bts != null && bts.length > 0){
 				user = (User) unserialize(bts);
@@ -88,7 +91,7 @@ public class CacheClient implements CacheManager {
 		if(user != null){
 			try {
 				jedis = getJedis();
-				jedis.set("userInfo".getBytes(), serialize(user));
+				jedis.set(user.getSessionID().getBytes(), serialize(user));
 
 				flag = true;
 

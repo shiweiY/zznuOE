@@ -1,5 +1,7 @@
 package com.zznu.oe.tech.cache;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.zznu.oe.model.User;
 
 public interface CacheManager {
@@ -10,7 +12,7 @@ public interface CacheManager {
 	
 	//User
 	void setUser(User value);
-	User getUserInfo();
+	User getUserInfo(HttpServletRequest request);
 	
 	//Object
 	void setSerialData(String key,Object value);

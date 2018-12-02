@@ -20,3 +20,7 @@
 	margin:18 60 0 0;
 }
 
+#top_menu_ul a{
+	cursor:pointer;
+}
+

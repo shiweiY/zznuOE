@@ -10,15 +10,15 @@ import java.util.Date;
  *
  */
 public class DateUtil {
-	public static final String YYYYMMDD = "yyyy-mm-dd";
-	public static final String TIMEMonth = "1 3 5 7 8 10 12";
+	final String YYYYMMDD = "yyyy-mm-dd";
+	final String TIMEMonth = "1 3 5 7 8 10 12";
 	
 	public static void main(String[] args) {
 //		getUserCurrentTimeMillis(new User());
 	}
 	
 	/***
-	 * 时间戳
+	 * 此时时间戳
 	 * @return 
 	 * 		String time
 	 */

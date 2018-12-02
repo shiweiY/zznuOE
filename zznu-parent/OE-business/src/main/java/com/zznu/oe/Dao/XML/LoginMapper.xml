@@ -34,8 +34,8 @@
  	
  	<insert id="insertLoginLog" parameterType="Map" >
  		INSERT INTO loginrecord VALUES(#{loginId,jdbcType=VARCHAR},#{user.id,jdbcType=VARCHAR}, 
- 									   #{user.username,jdbcType=DATE},#{createTime,jdbcType=VARCHAR},
- 									   #{clientIp,jdbcType=VARCHAR});
+ 									   #{user.username,jdbcType=DATE},#{loginTime,jdbcType=VARCHAR},
+ 									   #{loginIp,jdbcType=VARCHAR});
  	</insert>
  	
  	<select id="getMenuId" resultType="String">

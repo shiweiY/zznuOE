@@ -1,5 +1,7 @@
 package com.zznu.oe.tech.cache;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
 
 import com.zznu.oe.model.User;
@@ -17,8 +19,8 @@ public class RedisHelper extends JedisClient{
 	public static void setUserInfo(User user){
 		cache.setUser(user);
 	}
-	public static User getUserInfo(){
-		return cache.getUserInfo();
+	public static User getUserInfo(HttpServletRequest request){
+		return cache.getUserInfo(request);
 	}
 
 	

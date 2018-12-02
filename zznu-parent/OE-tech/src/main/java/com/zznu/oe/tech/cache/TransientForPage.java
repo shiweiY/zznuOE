@@ -19,7 +19,7 @@ import com.zznu.oe.model.JSONReturn;
 public class TransientForPage {
 	
 	@ResponseBody
-	@RequestMapping(value="/getRedisDataByKeys",method=RequestMethod.POST)
+	@RequestMapping(value="/getCacheDataByKeys",method=RequestMethod.POST)
 	public JSONReturn getTransientData(HttpServletRequest request) {
 		Map<Object,Object> map = new HashMap<Object,Object>();
 		String[] keys = request.getParameterValues("params");
